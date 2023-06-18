@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "You have created your first reservation at Wow Cocktail Bar. Don't forget to claim your.svg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
