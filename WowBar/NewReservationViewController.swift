@@ -152,9 +152,9 @@ class NewReservationViewController: UIViewController {
     let toButtonDataPicker: UIButton = {
         let button = UIButton()
         button.setTitle("23:00", for: .normal)
-        button.setTitle("", for: .highlighted)
+//        button.setTitle("", for: .highlighted)
         button.titleLabel?.font = UIFont(name: "Katibeh-Regular", size: Constants.setSizeY(30))
-        button.addTarget(self, action: #selector(toButtonDataPickerPressed), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(toButtonDataPickerPressed), for: .touchUpInside)
         return button
     }()
     
@@ -506,6 +506,27 @@ class NewReservationViewController: UIViewController {
     }()
     
     private var customNavigationBar = UINavigationBar()
+    
+    let datapicker: UIDatePicker = {
+        let datapicker = UIDatePicker()
+        datapicker.locale = .current
+        datapicker.datePickerMode = .dateAndTime
+        datapicker.tintColor = .systemGreen
+        datapicker.translatesAutoresizingMaskIntoConstraints = false
+        datapicker.backgroundColor = .white
+        datapicker.layer.zPosition = 1
+        datapicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        return datapicker
+    }()
+    
+    let jackdawButton: UIButton = {
+        let button = UIButton()
+        button.setBackgroundImage(UIImage(named: "jackdaw"), for: .normal)
+        button.layer.zPosition = 1
+        button.addTarget(self, action: #selector(jackdawButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -1490,25 +1511,44 @@ extension NewReservationViewController {
     }
     
     @objc func fromButtonDataPickerPressed() {
-        pickerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(pickerView)
+        datapicker.isHidden = false
+        jackdawButton.isHidden = false
+        scrollView.addSubview(datapicker)
         NSLayoutConstraint.activate([
-            pickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pickerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pickerView.widthAnchor.constraint(equalToConstant: 100),
-            pickerView.heightAnchor.constraint(equalToConstant: 150)
+            datapicker.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            datapicker.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor, constant: -30),
         ])
+        scrollView.addSubview(jackdawButton)
+        NSLayoutConstraint.activate([
+            jackdawButton.widthAnchor.constraint(equalToConstant: 30),
+            jackdawButton.heightAnchor.constraint(equalToConstant: 30),
+            jackdawButton.rightAnchor.constraint(equalTo: datapicker.rightAnchor, constant: -10),
+            jackdawButton.bottomAnchor.constraint(equalTo: datapicker.bottomAnchor,constant: -10),
+        ])
+        
     }
     
-    @objc func toButtonDataPickerPressed() {
-        pickerViewTwo.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(pickerViewTwo)
-        NSLayoutConstraint.activate([
-            pickerViewTwo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            pickerViewTwo.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            pickerViewTwo.widthAnchor.constraint(equalToConstant: 100),
-            pickerViewTwo.heightAnchor.constraint(equalToConstant: 150)
-        ])
+    @objc func jackdawButtonPressed() {
+        datapicker.isHidden = true
+        jackdawButton.isHidden = true
+        
+    }
+    
+    @objc func datePickerValueChanged(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM" // Формат дня и месяца
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm" // Формат часов и минут
+        
+        let selectedDate = sender.date
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        let formattedTime = timeFormatter.string(from: selectedDate)
+        
+        fromdateLabel.text = formattedDate
+        fromButtonDataPicker.setTitle(formattedTime, for: .normal)
+        toDateLabel.text = formattedDate
+        toButtonDataPicker.setTitle("23:00", for: .normal)
     }
     
     @objc func reserveButtonPressed() {
@@ -1601,21 +1641,21 @@ extension NewReservationViewController {
                     }
                 }
                 
-                var session = self.defaults.object(forKey: "session")
-                if session as! Int == 1 {
-                    session = 2
-                    DispatchQueue.main.async { self.defaults.set(session, forKey: "session") }
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        DispatchQueue.main.async {
-                            self.view.window?.rootViewController = UINavigationController(rootViewController: InstructionsViewController(data: newData))
-                        }
-                    }
-                } else {
+//                var session = self.defaults.object(forKey: "session")
+//                if session as! Int == 1 {
+//                    session = 2
+//                    DispatchQueue.main.async { self.defaults.set(session, forKey: "session") }
+//                    
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                        DispatchQueue.main.async {
+//                            self.view.window?.rootViewController = UINavigationController(rootViewController: InstructionsViewController(data: newData))
+//                        }
+//                    }
+//                } else {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         self.view.window?.rootViewController = UINavigationController(rootViewController: EnjoyViewController())
                     }
-                }
+//                }
                 
             }
             

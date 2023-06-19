@@ -155,7 +155,7 @@ class TimeTableViewController: UIViewController {
                     let firstFive = self.firstArray[i].date.prefix(5)
                     let date = dateFormatter.date(from: String(firstFive))!
                     print(date)
-                    if date == todayDate {
+                    if date >= todayDate {
                         thirtyArray.append(self.firstArray[i])
                     } else {
                         self.secondArray.append(self.firstArray[i])
