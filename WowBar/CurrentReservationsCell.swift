@@ -50,7 +50,7 @@ class CurrentReservationsCell: UICollectionViewCell {
         textField.text = "Пример текста"
         textField.borderStyle = .roundedRect
         textField.textAlignment = .center
-        textField.isUserInteractionEnabled = false
+        
         textField.backgroundColor = UIColor.clear
         textField.textColor = UIColor.white
         let font = UIFont.systemFont(ofSize: Constants.setSizeY(11), weight: .regular)
@@ -84,15 +84,21 @@ class CurrentReservationsCell: UICollectionViewCell {
         return view
     }()
     
-    let editDate: UITextField = {
-        let textField = UITextField()
-        textField.backgroundColor = UIColor.clear
-        textField.textColor = UIColor.white
-        let font = UIFont(name: "Katibeh-Regular", size: Constants.setSizeY(28))
-        textField.font = font
-        textField.isHidden = true
-        textField.isUserInteractionEnabled = false
-        return textField
+//    let editDate: UITextField = {
+//        let textField = UITextField()
+//        textField.backgroundColor = UIColor.clear
+//        textField.textColor = UIColor.white
+//        let font = UIFont(name: "Katibeh-Regular", size: Constants.setSizeY(28))
+//        textField.font = font
+//        textField.isHidden = true
+//        return textField
+//    }()
+    
+    let editDate: UIButton = {
+        let button = UIButton()
+        button.setTitle("", for: .highlighted)
+        button.titleLabel?.font = UIFont(name: "Katibeh-Regular", size: Constants.setSizeY(28))
+        return button
     }()
     
     let editDateButton: UIButton = {
@@ -135,7 +141,6 @@ class CurrentReservationsCell: UICollectionViewCell {
         let font = UIFont(name: "Katibeh-Regular", size: Constants.setSizeY(28))
         textField.font = font
         textField.isHidden = true
-        textField.isUserInteractionEnabled = false
         return textField
     }()
     
@@ -183,10 +188,33 @@ class CurrentReservationsCell: UICollectionViewCell {
         return button
     }()
     
+    let datePicker: UIDatePicker = {
+        let datapicker = UIDatePicker()
+        datapicker.locale = .current
+        datapicker.datePickerMode = .dateAndTime
+        datapicker.tintColor = .systemGreen
+        datapicker.translatesAutoresizingMaskIntoConstraints = false
+        datapicker.backgroundColor = .white
+        datapicker.layer.zPosition = 1
+//        datapicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        datapicker.isHidden = true
+        return datapicker
+    }()
+    
+    let jackdawDateButton: UIButton = {
+        let button = UIButton()
+        button.setBackgroundImage(UIImage(named: "jackdaw"), for: .normal)
+        button.layer.zPosition = 1
+//        button.addTarget(self, action: #selector(jackdawButtonPressed), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.isHidden = true
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         editNameTable.delegate = self
-        editDate.delegate = self
+//        editDate.delegate = self
         editNameClient.delegate = self
         backgroundColor = .black
         setConstants()
@@ -226,12 +254,14 @@ class CurrentReservationsCell: UICollectionViewCell {
         self.addSubview(jackdawButton)
         self.addSubview(crossButton)
         self.addSubview(cancelTableButton)
+        self.addSubview(datePicker)
+        self.addSubview(jackdawDateButton)
         nameClientView.addSubview(editNameClient)
         image.addSubview(nameTableLabel)
         image.addSubview(dateLabel)
         image.addSubview(nameClientLabel)
         image.addSubview(commentLabel)
-        
+       
     }
     
     private func setConstraints() {
@@ -262,7 +292,9 @@ class CurrentReservationsCell: UICollectionViewCell {
         }
         
         nameTableLabel.snp.makeConstraints {
-            $0.centerX.equalTo(image.snp.centerX)
+            $0.width.equalTo(Constants.setSizeY(100))
+            //TODO: Size
+            $0.centerX.equalTo(background.snp.centerX).offset(Constants.setSizeY(20))
             $0.top.equalTo(image.snp.top).offset(Constants.setSizeY(3))
         }
         
@@ -285,8 +317,8 @@ class CurrentReservationsCell: UICollectionViewCell {
         
         editDate.snp.makeConstraints {
             $0.width.equalTo(Constants.setSizeY(116))
-            $0.top.equalTo(editDateView.snp.top).inset(Constants.setSizeY(7))
-            $0.left.equalTo(editDateView.snp.left).inset(Constants.setSizeY(10))
+            $0.centerX.equalTo(editDateView.snp.centerX)
+            $0.top.equalTo(editDateView.snp.top)
         }
         
         editDateButton.snp.makeConstraints {
@@ -341,6 +373,32 @@ class CurrentReservationsCell: UICollectionViewCell {
             $0.bottom.equalTo(image.snp.bottom).inset(Constants.setSizeY(10))
             $0.right.equalTo(image.snp.right).inset(Constants.setSizeY(10))
         }
+        
+        if #available(iOS 14.0, *) {
+            // Код для iOS 13 и новее
+            datePicker.snp.makeConstraints {
+                $0.top.equalTo(image.snp.top)
+                $0.centerX.equalToSuperview()
+            }
+            jackdawDateButton.snp.makeConstraints {
+                $0.width.equalTo(30)
+                $0.height.equalTo(30)
+                $0.centerY.equalTo(datePicker.snp.centerY)
+                $0.left.equalTo(datePicker.snp.right).offset(10)
+            }
+        } else {
+            datePicker.snp.makeConstraints {
+                $0.top.equalTo(image.snp.top)
+                $0.centerX.equalToSuperview()
+            }
+
+            jackdawDateButton.snp.makeConstraints {
+                $0.width.equalTo(30)
+                $0.height.equalTo(30)
+                $0.right.equalTo(datePicker.snp.right).inset(10)
+                $0.top.equalTo(datePicker.snp.top).inset(10)
+            }
+        }
     }
     
     func setNameTable(_ text: String) {
@@ -350,7 +408,8 @@ class CurrentReservationsCell: UICollectionViewCell {
     
     func setDateLabel(_ text: String) {
         dateLabel.text = text
-        editDate.text = text
+//        editDate.text = text
+        editDate.setTitle(text, for: .normal)
     }
     
     func setNameClient(_ text: String) {
@@ -412,6 +471,8 @@ class CurrentReservationsCell: UICollectionViewCell {
     @objc func dismissKeyboard() {
         self.endEditing(true)
     }
+    
+    
 }
 
 
@@ -419,5 +480,22 @@ extension CurrentReservationsCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             textField.resignFirstResponder()
             return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // Check if the text field is the one you want to limit
+        if textField == editNameTable {
+            // Get the current text in the text field
+            let currentText = textField.text ?? ""
+            
+            // Compute the new text after applying the replacement
+            let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+            
+            // Return false if the new text exceeds the limit
+            return newText.count <= 21
+        }
+        
+        // Allow the change for other text fields
+        return true
     }
 }

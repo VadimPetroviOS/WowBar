@@ -148,11 +148,11 @@ class HistoryReservationsCell: UICollectionViewCell {
             $0.left.equalTo(dateLabel.snp.left)
         }
         
-        commentLabel.snp.makeConstraints {
-            $0.size.equalTo(CGSize(width: Constants.setSizeY(165), height: Constants.setSizeY(40)))
-            $0.top.equalTo(nameClientLabel.snp.bottom).offset(Constants.setSizeY(14))
-            $0.left.equalTo(nameClientLabel.snp.left)
-        }
+//        commentLabel.snp.makeConstraints {
+//            $0.size.equalTo(CGSize(width: Constants.setSizeY(165), height: Constants.setSizeY(40)))
+//            $0.top.equalTo(nameClientLabel.snp.bottom)//.offset(Constants.setSizeY(14))
+//            $0.left.equalTo(nameClientLabel.snp.left)
+//        }
         
         textView.snp.makeConstraints {
             $0.size.equalTo(CGSize(width: Constants.setSizeY(191), height: Constants.setSizeY(39)))

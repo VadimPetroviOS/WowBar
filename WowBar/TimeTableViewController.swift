@@ -396,7 +396,8 @@ class TimeTableViewController: UIViewController {
             // смена имен в лейблах
             cell.nameTableLabel.text = cell.editNameTable.text
             cell.nameClientLabel.text = cell.editNameClient.text
-            cell.dateLabel.text = cell.editDate.text
+//            cell.dateLabel.text = cell.editDate.text
+            cell.dateLabel.text = cell.editDate.titleLabel?.text!
             
             // сохранение эти данных в UsDe
             firstArray[indexPath.item].nameTable = cell.nameTableLabel.text!
@@ -499,6 +500,38 @@ class TimeTableViewController: UIViewController {
         }
         
     }
+    
+    @objc func jackdawButtonPressedPressed(sender: UIButton) {
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        if let cell = topColView.cellForItem(at: indexPath) as? CurrentReservationsCell {
+            cell.datePicker.isHidden = true
+            cell.jackdawDateButton.isHidden = true
+            let text = datePickerValueChanged(cell.datePicker)
+            cell.editDate.setTitle(text, for: .normal)
+        }
+    }
+    
+    @objc func editDatePressed(sender: UIButton) {
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        if let cell = topColView.cellForItem(at: indexPath) as? CurrentReservationsCell {
+            cell.datePicker.isHidden = false
+            cell.jackdawDateButton.isHidden = false
+        }
+    }
+    
+    @objc func datePickerValueChanged(_ sender: UIDatePicker) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM" // Формат дня и месяца
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm" // Формат часов и минут
+        
+        let selectedDate = sender.date
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        let formattedTime = timeFormatter.string(from: selectedDate)
+        
+        return "\(formattedDate) \(formattedTime)"
+    }
 }
 
 extension TimeTableViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -531,23 +564,31 @@ extension TimeTableViewController: UICollectionViewDataSource, UICollectionViewD
             cell.pencilButton.tag = indexPath.row
             cell.pencilButton.addTarget(self, action: #selector(pencilButtonPressed(sender:)), for: .touchUpInside)
             
-            cell.editNameTableButton.tag = indexPath.row
-            cell.editNameTableButton.addTarget(self, action: #selector(editNameTableButtonPressed(sender:)), for: .touchUpInside)
+//            cell.editNameTableButton.tag = indexPath.row
+//            cell.editNameTableButton.addTarget(self, action: #selector(editNameTableButtonPressed(sender:)), for: .touchUpInside)
             
-            cell.editDateButton.tag = indexPath.row
-            cell.editDateButton.addTarget(self, action: #selector(editDateButtonPressed(sender:)), for: .touchUpInside)
+//            cell.editDateButton.tag = indexPath.row
+//            cell.editDateButton.addTarget(self, action: #selector(editDateButtonPressed(sender:)), for: .touchUpInside)
             
-            cell.nameClientButton.tag = indexPath.row
-            cell.nameClientButton.addTarget(self, action: #selector(nameClientButtonPressed(sender:)), for: .touchUpInside)
+//            cell.nameClientButton.tag = indexPath.row
+//            cell.nameClientButton.addTarget(self, action: #selector(nameClientButtonPressed(sender:)), for: .touchUpInside)
             
-            cell.jackdawButton.tag = indexPath.row
-            cell.jackdawButton.addTarget(self, action: #selector(jackdawButtonPressed(sender:)), for: .touchUpInside)
+            
             
             cell.crossButton.tag = indexPath.row
             cell.crossButton.addTarget(self, action: #selector(crossButtonPressed(sender:)), for: .touchUpInside)
             
             cell.cancelTableButton.tag = indexPath.row
             cell.cancelTableButton.addTarget(self, action: #selector(cancelTableButtonPressed(sender:)), for: .touchUpInside)
+            
+            cell.editDate.tag = indexPath.row
+            cell.editDate.addTarget(self, action: #selector(editDatePressed(sender:)), for: .touchUpInside)
+            
+            cell.jackdawDateButton.tag = indexPath.row
+            cell.jackdawDateButton.addTarget(self, action: #selector(jackdawButtonPressedPressed(sender:)), for: .touchUpInside)
+            
+            cell.jackdawButton.tag = indexPath.row
+            cell.jackdawButton.addTarget(self, action: #selector(jackdawButtonPressed(sender:)), for: .touchUpInside)
             
             return cell
         } else if collectionView == bottomColView {

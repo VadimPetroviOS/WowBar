@@ -1514,17 +1514,36 @@ extension NewReservationViewController {
         datapicker.isHidden = false
         jackdawButton.isHidden = false
         scrollView.addSubview(datapicker)
-        NSLayoutConstraint.activate([
-            datapicker.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            datapicker.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor, constant: -30),
-        ])
         scrollView.addSubview(jackdawButton)
-        NSLayoutConstraint.activate([
-            jackdawButton.widthAnchor.constraint(equalToConstant: 30),
-            jackdawButton.heightAnchor.constraint(equalToConstant: 30),
-            jackdawButton.rightAnchor.constraint(equalTo: datapicker.rightAnchor, constant: -10),
-            jackdawButton.bottomAnchor.constraint(equalTo: datapicker.bottomAnchor,constant: -10),
-        ])
+        if #available(iOS 14.0, *) {
+            // Код для iOS 13 и новее
+            NSLayoutConstraint.activate([
+                datapicker.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+                datapicker.topAnchor.constraint(equalTo: viewGuests.topAnchor),
+                
+                jackdawButton.widthAnchor.constraint(equalToConstant: 30),
+                jackdawButton.heightAnchor.constraint(equalToConstant: 30),
+                jackdawButton.centerYAnchor.constraint(equalTo: datapicker.centerYAnchor),
+                jackdawButton.leadingAnchor.constraint(equalTo: datapicker.trailingAnchor,constant: 10),
+            ])
+            
+        } else {
+            NSLayoutConstraint.activate([
+                datapicker.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+                datapicker.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor, constant: -30),
+            ])
+            
+            NSLayoutConstraint.activate([
+                jackdawButton.widthAnchor.constraint(equalToConstant: 30),
+                jackdawButton.heightAnchor.constraint(equalToConstant: 30),
+                jackdawButton.rightAnchor.constraint(equalTo: datapicker.rightAnchor, constant: -10),
+                jackdawButton.bottomAnchor.constraint(equalTo: datapicker.bottomAnchor,constant: -10),
+            ])
+        }
+                
+       
+        
+       
         
     }
     
